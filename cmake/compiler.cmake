@@ -9,43 +9,6 @@ set(compiler_included true)
 add_library(cmake_cpp_boilerplate_compiler_options INTERFACE)
 add_library(cmake_cpp_boilerplate::compiler_options ALIAS cmake_cpp_boilerplate_compiler_options)
 
-option(BP_WARNING_AS_ERROR "Treats compiler warnings as errors" ON)
-if(MSVC)
-  target_compile_options(cmake_cpp_boilerplate_compiler_options INTERFACE /W4 "/permissive-")
-  if(BP_WARNING_AS_ERROR)
-    target_compile_options(cmake_cpp_boilerplate_compiler_options INTERFACE /WX)
-  endif()
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-  target_compile_options(cmake_cpp_boilerplate_compiler_options
-                         INTERFACE -Wall
-                                   -Wextra
-                                   -Wshadow
-                                   -Wnon-virtual-dtor
-                                   -Wold-style-cast
-                                   -Wcast-align
-                                   -Wunused
-                                   -Woverloaded-virtual
-                                   -Wpedantic
-                                   -Wconversion
-                                   -Wsign-conversion
-                                   -Wnull-dereference
-                                   -Wdouble-promotion
-                                   -Wformat=2)
-  if(BP_WARNING_AS_ERROR)
-    target_compile_options(cmake_cpp_boilerplate_compiler_options INTERFACE -Werror)
-  endif()
-
-  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    target_compile_options(cmake_cpp_boilerplate_compiler_options
-                           INTERFACE -Wmisleading-indentation
-                                     -Wduplicated-cond
-                                     -Wduplicated-branches
-                                     -Wlogical-op
-                                     -Wuseless-cast
-                           )
-  endif()
-endif()
-
 option(BP_ENABLE_PCH "Enable Precompiled Headers" OFF)
 if (BP_ENABLE_PCH)
   target_precompile_headers(cmake_cpp_boilerplate_compiler_options INTERFACE
